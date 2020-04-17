@@ -591,7 +591,7 @@ def G_synthesis_stylegan2(
             x = layer(x, layer_idx=res*2-1, fmaps=nf(res+1), kernel=3, up=True)
         with tf.variable_scope('Conv1'):
             x = layer(x, layer_idx=res*2, fmaps=nf(res+1), kernel=3)
-        if use_attention:
+        if use_attention and res <= 4:
             x = google_attention(x, 'attention_g')
         if architecture == 'resnet':
             with tf.variable_scope('Skip'):
@@ -822,7 +822,7 @@ def D_stylegan2(
             x = apply_bias_act(conv2d_layer(x, fmaps=nf(res+1), kernel=3), act=act)
         with tf.variable_scope('Conv1_down'):
             x = apply_bias_act(conv2d_layer(x, fmaps=nf(res), kernel=3, down=True, resample_kernel=resample_kernel), act=act)
-        if use_attention:
+        if use_attention and res <= 4:
             x = google_attention(x, 'attention_d')
         if architecture == 'resnet':
             with tf.variable_scope('Skip'):
