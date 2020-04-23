@@ -305,7 +305,7 @@ def training_loop(
                     tflib.run(G_reg_op, feed_dict_g)
                 tflib.run([D_train_op, Gs_update_op], feed_dict_d)
                 if run_D_reg:
-                    _, ppl = tflib.run(D_reg_op, feed_dict_d)
+                    _, ppl = tflib.run([D_reg_op, perplexity], feed_dict_d)
 
             # Slow path with gradient accumulation.
             else:
@@ -317,10 +317,10 @@ def training_loop(
                 tflib.run(Gs_update_op, feed_dict_g)
                 for _round in rounds:
                     tflib.run(data_fetch_op, feed_dict_d)
-                    _, ppl = tflib.run(D_train_op, feed_dict_d)
+                    _, ppl = tflib.run([D_train_op, perplexity], feed_dict_d)
                 if run_D_reg:
                     for _round in rounds:
-                        _, ppl = tflib.run(D_reg_op, feed_dict_d)
+                        _, ppl = tflib.run([D_reg_op, perplexity], feed_dict_d)
 
         # Perform maintenance tasks once per tick.
         done = (cur_nimg >= total_kimg * 1000)
