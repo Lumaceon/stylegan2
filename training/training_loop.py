@@ -318,8 +318,7 @@ def training_loop(
                 for _round in rounds:
                     tflib.run(data_fetch_op, feed_dict_d)
                     _, ppl = tflib.run([D_train_op, perplexity], feed_dict_d)
-                if run_D_reg:
-                    for _round in rounds:
+                    if run_D_reg:
                         _, ppl = tflib.run([D_reg_op, perplexity], feed_dict_d)
 
         # Perform maintenance tasks once per tick.
